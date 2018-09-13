@@ -145,7 +145,27 @@
                     // se genere el index buffer correspondiente para renderizar la grilla utilizando
                     // triangle-strip
                     //
-                    this.index_buffer = [0, 6, 1, 7, 2, 8, 3, 9, 4, 10, 5, 11, 11, 17, 10, 16, 9, 15, 8, 14, 7, 13, 6, 12, 12, 18, 13, 19, 14, 20, 15, 21, 16, 22, 17, 23, 23, 29, 22, 28, 21, 27, 20, 26, 19, 25, 18, 24];
+
+                    this.index_buffer = [];
+
+                    var i = 0;
+                    var j = 0;
+                    var piso = 0;
+                    var aux = 0;
+                    while (i < (this.rows - 1)) {
+                        aux = Math.pow(-1,i);
+                        j = 0;
+                        while (j < this.cols) {
+                            this.index_buffer.push(aux*j + piso);
+                            this.index_buffer.push(aux*j + this.cols + piso);
+                            //console.log((aux*j+piso)+"--"+(aux*j + this.cols + piso));
+                            j++;
+                        }
+                        piso = aux*(j-1) + this.cols + piso;
+                        i++;
+                    }
+
+                    //this.index_buffer = [0, 6, 1, 7, 2, 8, 3, 9, 4, 10, 5, 11, 11, 17, 10, 16, 9, 15, 8, 14, 7, 13, 6, 12, 12, 18, 13, 19, 14, 20, 15, 21, 16, 22, 17, 23, 23, 29, 22, 28, 21, 27, 20, 26, 19, 25, 18, 24];
                 }
 
                 // Esta función inicializa el position_buffer y el color buffer de forma de 
@@ -154,6 +174,31 @@
                 // El propósito de esta función es a modo de ejemplo de como inicializar y cargar
                 // los buffers de las posiciones y el color para cada vértice.
                 this.createUniformPlaneGrid = function(){
+
+                    this.position_buffer = [];
+                    this.color_buffer = [];
+
+                    for (var i = 0.0; i < this.rows; i++) { 
+                       for (var j = 0.0; j < this.cols; j++) {
+
+                           // Para cada vértice definimos su posición
+                           // como coordenada (x, y, z=0)
+                           this.position_buffer.push(j - (this.cols-1.0)/2.0);
+                           this.position_buffer.push((this.rows-1.0)/2.0 - i);
+                           
+                           this.position_buffer.push(0);
+                           //console.log(i+","+j+":"+(i-(this.rows-1.0)/2.0)+","+(j-(this.rows-1)/2.0));
+
+                           // Para cada vértice definimos su color
+                           this.color_buffer.push(1.0/this.rows * i);
+                           this.color_buffer.push(0.2);
+                           this.color_buffer.push(1.0/this.cols * j);
+                                                  
+                       };
+                    };
+                }
+
+                this.createCylinderGrid = function(){
 
                     this.position_buffer = [];
                     this.color_buffer = [];
@@ -315,8 +360,9 @@
             
             function setupBuffers()
             {
-                my_grid = new VertexGrid(5,6);
-                my_grid.createUniformPlaneGrid();
+                my_grid = new VertexGrid(4,4);
+                //my_grid.createUniformPlaneGrid();
+                my_grid.createCylinderGrid();
                 my_grid.createIndexBuffer();
                 my_grid.setupWebGLBuffers();
             }
@@ -333,7 +379,7 @@
                 // Preparamos una matriz de modelo+vista.
                 mat4.identity(mvMatrix);
                 mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0, -5.0]);
-                mat4.rotate(mvMatrix, mvMatrix, t, [0.0, 1.0, 0.0]);
+                //mat4.rotate(mvMatrix, mvMatrix, t, [0.0, 1.0, 0.0]);
                 t = t + 0.01;
 
                 gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix);
