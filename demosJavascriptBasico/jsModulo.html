@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Modulos</title>
+</head>
+
+
+<body>
+
+
+<script>
+
+
+
+
+
+
+var SG6671 =  SG6671 || {};
+
+// Modulo 1
+(function(){
+	
+
+	var temp=1;
+	var a=2;
+	
+	function Clasificador(){
+		//
+		//	
+		console.log("se contruyo un clasificador");
+		
+		this.metodo1=function(){
+			return 0;
+		}
+		
+		this.metodo2=function(){
+			return 1;	
+		}
+	}
+	
+	SG6671.clasificador=new Clasificador();
+
+}());
+
+
+
+// Modulo 2
+(function(){
+	
+
+	
+	function calcularPI(){
+		return Math.PI;	
+	}
+
+	
+	SG6671.calcularPI=calcularPI;
+
+}());
+
+
+
+console.log(">> SG6671.calcularPI(): "+SG6671.calcularPI());
+
+console.log(">> SG6671.Clasificador.metodo1(): "+SG6671.clasificador.metodo1());
+
+</script>
+
+<h3>Para ver el resultado de la ejecución del Script abrir la consola con F12</h3>
+
+<pre style="margin:20px;border:1px solid black;background-color:#EEEEEE; padding:10px;">
+
+
+
+
+
+var SG6671 =  SG6671 || {};
+
+// Modulo 1
+(function(){
+	
+
+	var temp=1;
+	var a=2;
+	
+	function Clasificador(){
+		//
+		//	
+		console.log("se contruyo un clasificador");
+		
+		this.metodo1=function(){
+			return 0;
+		}
+		
+		this.metodo2=function(){
+			return 1;	
+		}
+	}
+	
+	SG6671.clasificador=new Clasificador();
+
+}());
+
+
+
+// Modulo 2
+(function(){
+	
+
+	
+	function calcularPI(){
+		return Math.PI;	
+	}
+
+	
+	SG6671.calcularPI=calcularPI;
+
+}());
+
+
+
+console.log(">> SG6671.calcularPI(): "+SG6671.calcularPI());
+
+console.log(">> SG6671.Clasificador.metodo1(): "+SG6671.clasificador.metodo1());
+
+</pre>
+</body>
+</html>
