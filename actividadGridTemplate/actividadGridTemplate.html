@@ -202,16 +202,14 @@
 
                     this.position_buffer = [];
                     this.color_buffer = [];
-
+                    var angulo = 0;
                     for (var i = 0.0; i < this.rows; i++) { 
                        for (var j = 0.0; j < this.cols; j++) {
+                            angulo = 2*j*Math.PI/(this.cols-1);
+                            this.position_buffer.push(Math.cos(angulo));
+                            this.position_buffer.push(Math.sin(angulo));
+                            this.position_buffer.push(1-(i/this.rows)*2);
 
-                           // Para cada vértice definimos su posición
-                           // como coordenada (x, y, z=0)
-                           this.position_buffer.push(j - (this.cols-1.0)/2.0);
-                           this.position_buffer.push((this.rows-1.0)/2.0 - i);
-                           
-                           this.position_buffer.push(0);
                            //console.log(i+","+j+":"+(i-(this.rows-1.0)/2.0)+","+(j-(this.rows-1)/2.0));
 
                            // Para cada vértice definimos su color
@@ -360,7 +358,7 @@
             
             function setupBuffers()
             {
-                my_grid = new VertexGrid(4,4);
+                my_grid = new VertexGrid(4,9);
                 //my_grid.createUniformPlaneGrid();
                 my_grid.createCylinderGrid();
                 my_grid.createIndexBuffer();
@@ -379,7 +377,7 @@
                 // Preparamos una matriz de modelo+vista.
                 mat4.identity(mvMatrix);
                 mat4.translate(mvMatrix, mvMatrix, [0.0, 0.0, -5.0]);
-                //mat4.rotate(mvMatrix, mvMatrix, t, [0.0, 1.0, 0.0]);
+                mat4.rotate(mvMatrix, mvMatrix, t, [0.0, 1.0, 0.0]);
                 t = t + 0.01;
 
                 gl.uniformMatrix4fv(u_model_view_matrix, false, mvMatrix);
