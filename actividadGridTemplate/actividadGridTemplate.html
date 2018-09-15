@@ -14,26 +14,26 @@
         <!--
         Vertex shader
 
-        El vertex shader define la posición y forma de cada vertice de cada polígono.
+        El vertex shader define la posicion y forma de cada vertice de cada poligono.
         --> 
         <script id="shader-vs" type="x-shader/x-vertex">
-            // Los atributos son características propias de cada vertice.
+            // Los atributos son caracteristicas propias de cada vertice.
             attribute vec3 aVertexPosition;
             attribute vec3 aVertexColor;
 
-            // Los uniforms son características propias de una etapa de dibujado completa.
+            // Los uniforms son caracteristicas propias de una etapa de dibujado completa.
             // Son comunes a todos los vertices involucrados en el dibujado.
             uniform mat4 uMVMatrix;
             uniform mat4 uPMatrix;
 
             // Los varying son propiedades que toman valor para cada fragmento a partir
             // de interpolar linealmente entre los valores que se les asigna en cada 
-            // vértice del polígono al cual pertenecen.
+            // vertice del poligono al cual pertenecen.
             varying highp vec4 vColor;    
  
             void main(void) {
                 // gl_Position es una variable "built-in" de GLSL que es usada para 
-                // almacenar la posición resultante del fragmento.
+                // almacenar la posicion resultante del fragmento.
                 gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
                 vColor = vec4(aVertexColor,1.0);
             }
@@ -42,7 +42,7 @@
         <!--
         Fragment shader
 
-        Cada pixel en un polígono se llama fragmento. El fragment shader se encarga de
+        Cada pixel en un poligono se llama fragmento. El fragment shader se encarga de
         establecer el color de cada pixel. En este caso, asignamos el color blanco a 
         cada pixel.
         -->
@@ -73,7 +73,7 @@
             function getShader(gl, id) {
                 var shaderScript, src, currentChild, shader;
 
-                // Obtenemos el elemento <script> que contiene el código fuente del shader.
+                // Obtenemos el elemento <script> que contiene el codigo fuente del shader.
                 shaderScript = document.getElementById(id);
                 if (!shaderScript) {
                     return null;
@@ -89,7 +89,7 @@
                     currentChild = currentChild.nextSibling;
                 }
 
-                // Creamos un shader WebGL según el atributo type del <script>.
+                // Creamos un shader WebGL segun el atributo type del <script>.
                 if (shaderScript.type == "x-shader/x-fragment") {
                     shader = gl.createShader(gl.FRAGMENT_SHADER);
                 } else if (shaderScript.type == "x-shader/x-vertex") {
@@ -104,7 +104,7 @@
                 // Compilamos el shader.
                 gl.compileShader(shader);  
                   
-                // Chequeamos y reportamos si hubo algún error.
+                // Chequeamos y reportamos si hubo algun error.
                 if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {  
                   alert("An error occurred compiling the shaders: " + 
                         gl.getShaderInfoLog(shader));  
@@ -138,10 +138,10 @@
                 this.createIndexBuffer = function(){
 
                     // ACTIVIDAD 1.
-                    // Este index buffer está armado para renderizar dos los triangulos
+                    // Este index buffer esta armado para renderizar dos los triangulos
                     // que se obervan como ejemplo.
-                    // Modificar el método para que a partir de conocer las dimensiones
-                    // de la grilla (que deberían estar en los atributos this.rows y this.cols)
+                    // Modificar el metodo para que a partir de conocer las dimensiones
+                    // de la grilla (que deberian estar en los atributos this.rows y this.cols)
                     // se genere el index buffer correspondiente para renderizar la grilla utilizando
                     // triangle-strip
                     //
@@ -152,6 +152,14 @@
                     var j = 0;
                     var piso = 0;
                     var aux = 0;
+                    
+                    // Primera tapa del cilindro
+                    for (var h = 0; h < this.cols; h++) {
+                        this.index_buffer.push(this.rows*this.cols);
+                        this.index_buffer.push(h);
+                    }
+                    
+                    // Cilindro
                     while (i < (this.rows - 1)) {
                         aux = Math.pow(-1,i);
                         j = 0;
@@ -165,14 +173,21 @@
                         i++;
                     }
 
+                    // Tapa final del cilindro
+                    this.index_buffer.push(piso);
+                    for (var h = 1; h < this.cols; h++) {
+                        this.index_buffer.push(this.rows*this.cols+1);
+                        this.index_buffer.push(piso - aux*h);
+                    }
+
                     //this.index_buffer = [0, 6, 1, 7, 2, 8, 3, 9, 4, 10, 5, 11, 11, 17, 10, 16, 9, 15, 8, 14, 7, 13, 6, 12, 12, 18, 13, 19, 14, 20, 15, 21, 16, 22, 17, 23, 23, 29, 22, 28, 21, 27, 20, 26, 19, 25, 18, 24];
                 }
 
-                // Esta función inicializa el position_buffer y el color buffer de forma de 
+                // Esta funcion inicializa el position_buffer y el color buffer de forma de 
                 // crear un plano de color gris que se extiende sobre el plano XY, con Z=0
                 // El plano se genera centrado en el origen.
-                // El propósito de esta función es a modo de ejemplo de como inicializar y cargar
-                // los buffers de las posiciones y el color para cada vértice.
+                // El proposito de esta funcion es a modo de ejemplo de como inicializar y cargar
+                // los buffers de las posiciones y el color para cada vertice.
                 this.createUniformPlaneGrid = function(){
 
                     this.position_buffer = [];
@@ -181,7 +196,7 @@
                     for (var i = 0.0; i < this.rows; i++) { 
                        for (var j = 0.0; j < this.cols; j++) {
 
-                           // Para cada vértice definimos su posición
+                           // Para cada vertice definimos su posicion
                            // como coordenada (x, y, z=0)
                            this.position_buffer.push(j - (this.cols-1.0)/2.0);
                            this.position_buffer.push((this.rows-1.0)/2.0 - i);
@@ -189,7 +204,7 @@
                            this.position_buffer.push(0);
                            //console.log(i+","+j+":"+(i-(this.rows-1.0)/2.0)+","+(j-(this.rows-1)/2.0));
 
-                           // Para cada vértice definimos su color
+                           // Para cada vertice definimos su color
                            this.color_buffer.push(1.0/this.rows * i);
                            this.color_buffer.push(0.2);
                            this.color_buffer.push(1.0/this.cols * j);
@@ -203,35 +218,52 @@
                     this.position_buffer = [];
                     this.color_buffer = [];
                     var angulo = 0;
+
                     for (var i = 0.0; i < this.rows; i++) { 
-                       for (var j = 0.0; j < this.cols; j++) {
+                        for (var j = 0.0; j < this.cols; j++) {
                             angulo = 2*j*Math.PI/(this.cols-1);
                             this.position_buffer.push(Math.cos(angulo));
                             this.position_buffer.push(Math.sin(angulo));
-                            this.position_buffer.push(1-(i/this.rows)*2);
+                            this.position_buffer.push(1-(i/(this.rows-1))*2);
 
-                           //console.log(i+","+j+":"+(i-(this.rows-1.0)/2.0)+","+(j-(this.rows-1)/2.0));
-
-                           // Para cada vértice definimos su color
-                           this.color_buffer.push(1.0/this.rows * i);
-                           this.color_buffer.push(0.2);
-                           this.color_buffer.push(1.0/this.cols * j);
-                                                  
-                       };
+                            if ((i == 0) || (i == (this.rows - 1))) {
+                                this.color_buffer.push(0.0);
+                                this.color_buffer.push(0.0);
+                                this.color_buffer.push(1.0);
+                            } else {
+                                this.color_buffer.push(0.8);
+                                this.color_buffer.push(0.2);
+                                this.color_buffer.push(0.8);
+                            }                    
+                        };
                     };
+                    // Tapa del principio
+                    this.position_buffer.push(0.0);
+                    this.position_buffer.push(0.0);
+                    this.position_buffer.push(1.0);
+                    this.color_buffer.push(0.0);
+                    this.color_buffer.push(0.0);
+                    this.color_buffer.push(1.0);
+                    // Tapa del final
+                    this.position_buffer.push(0.0);
+                    this.position_buffer.push(0.0);
+                    this.position_buffer.push(-1.0);
+                    this.color_buffer.push(0.0);
+                    this.color_buffer.push(0.0);
+                    this.color_buffer.push(1.0);
                 }
 
                 // ACTIVIDAD 2.
-                // Crear alguna otra función similar a la anterior createUniformPlaneGrid()
+                // Crear alguna otra funcion similar a la anterior createUniformPlaneGrid()
                 // que cree una superficie en donde la altura ya no sea z=0 sino que tenga aluna forma
-                // o partón en particular.
+                // o patron en particular.
 
 
-                // Esta función crea e incializa los buffers dentro del pipeline para luego
+                // Esta funcion crea e incializa los buffers dentro del pipeline para luego
                 // utlizarlos a la hora de renderizar.
                 this.setupWebGLBuffers = function(){
 
-                    // 1. Creamos un buffer para las posicioens dentro del pipeline.
+                    // 1. Creamos un buffer para las posiciones dentro del pipeline.
                     this.webgl_position_buffer = gl.createBuffer();
                     // 2. Le decimos a WebGL que las siguientes operaciones que vamos a ser se aplican sobre el buffer que
                     // hemos creado.
@@ -239,28 +271,28 @@
                     // 3. Cargamos datos de las posiciones en el buffer.
                     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.position_buffer), gl.STATIC_DRAW);
 
-                    // Repetimos los pasos 1. 2. y 3. para la información del color
+                    // Repetimos los pasos 1. 2. y 3. para la informacion del color
                     this.webgl_color_buffer = gl.createBuffer();
                     gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
                     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.color_buffer), gl.STATIC_DRAW);   
 
-                    // Repetimos los pasos 1. 2. y 3. para la información de los índices
+                    // Repetimos los pasos 1. 2. y 3. para la informacion de los indices
                     // Notar que esta vez se usa ELEMENT_ARRAY_BUFFER en lugar de ARRAY_BUFFER.
-                    // Notar también que se usa un array de enteros en lugar de floats.
+                    // Notar tambien que se usa un array de enteros en lugar de floats.
                     this.webgl_index_buffer = gl.createBuffer();
                     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
                     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.index_buffer), gl.STATIC_DRAW);
                 }
 
 
-                // Esta función es la que se encarga de configurar todo lo necesario
+                // Esta funcion es la que se encarga de configurar todo lo necesario
                 // para dibujar el VertexGrid.
-                // En el caso del ejemplo puede observarse que la última línea del método
-                // indica dibujar triángulos utilizando los 6 índices cargados en el Index_Buffer.
+                // En el caso del ejemplo puede observarse que la ultima linea del metodo
+                // indica dibujar triangulos utilizando los 6 indices cargados en el Index_Buffer.
                 //
                 // ACTIVIDAD 3.
-                // Reemplazar dicha línea de código por la correspondiente para dibujar el strip
-                // de triángulos utilizando el index buffer generado en la ACTIVIDAD 1.
+                // Reemplazar dicha linea de codigo por la correspondiente para dibujar el strip
+                // de triangulos utilizando el index buffer generado en la ACTIVIDAD 1.
                 this.drawVertexGrid = function(){
 
                     var vertexPositionAttribute = gl.getAttribLocation(glProgram, "aVertexPosition");
@@ -332,14 +364,14 @@
                 // Linkeamos los shaders para generar el programa ejecutable.
                 gl.linkProgram(glProgram);
 
-                // Chequeamos y reportamos si hubo algún error.
+                // Chequeamos y reportamos si hubo algun error.
                 if (!gl.getProgramParameter(glProgram, gl.LINK_STATUS)) {
                   alert("Unable to initialize the shader program: " + 
                         gl.getProgramInfoLog(glProgram));
                   return null;
                 }
   
-                // Le decimos a WebGL que de aquí en adelante use el programa generado.
+                // Le decimos a WebGL que de aqui en adelante use el programa generado.
                 gl.useProgram(glProgram);
             }
             
@@ -358,7 +390,7 @@
             
             function setupBuffers()
             {
-                my_grid = new VertexGrid(4,9);
+                my_grid = new VertexGrid(4,65);
                 //my_grid.createUniformPlaneGrid();
                 my_grid.createCylinderGrid();
                 my_grid.createIndexBuffer();
@@ -389,8 +421,8 @@
     </head>
     <body onload="initWebGL()">
 		<center>
-			<h1>Sistemas Gráficos - 66.71</h1>
-			<h2>WebGL - Grilla de vértices</h2>
+			<h1>Sistemas Gr&aacute;ficos - 66.71</h1>
+			<h2>WebGL - Grilla de v&eacute;rtices</h2>
 			<canvas id="my-canvas" width="900" height="500">
 			Your browser does not support the HTML5 canvas element.
 			</scanvas>
