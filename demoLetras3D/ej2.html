@@ -349,8 +349,11 @@ function init(){
     //
 
     m1=mat4.create();
-    mat4.translate(m1,m1,vec3.fromValues(0,10,0));
+    mat4.translate(m1,m1,vec3.fromValues(-10,5,-10));
+    mat4.rotate(m1,m1,Math.PI/2,vec3.fromValues(0,0,1));
+    mat4.rotate(m1,m1,Math.PI/4,vec3.fromValues(1,0,0));
 
+    //mat4.scale(m1,m1,vec3.fromValues(1,1,1));
 
 
     modQ.applyMatrix(f(m1));
@@ -365,9 +368,10 @@ function init(){
     //
 
     m2=mat4.create();
-    //mat4.translate(m2,m2,vec3.fromValues(10,0,0));
-    mat4.rotate(m2,m2,Math.PI/2,vec3.fromValues(1,0,0));
-
+    mat4.translate(m2,m2,vec3.fromValues(0,5,-10));
+    mat4.rotate(m2,m2,Math.PI/2,vec3.fromValues(0,0,1));
+    mat4.rotate(m2,m2,-Math.PI/4,vec3.fromValues(1,0,0));
+    //mat4.scale(m2,m2,vec3.fromValues(1.5,1.5,1.5));
 
 
     modR.applyMatrix(f(m2));
@@ -381,11 +385,11 @@ function init(){
     //
 
     m3=mat4.create();
-    // Las primeras transformaciones son las ultimas que se hacen
-    mat4.translate(m3,m3,vec3.fromValues(-20,0,0));
-    mat4.rotate(m3,m3,Math.PI/4,vec3.fromValues(0,1,0));
-    mat4.scale(m3,m3,vec3.fromValues(2,2,2));
-    // Las ultimas transformaciones son las primeras en hacerse
+    mat4.translate(m3,m3,vec3.fromValues(10,5,-10));
+    mat4.rotate(m3,m3,Math.PI/2,vec3.fromValues(0,0,1));
+    mat4.rotate(m3,m3,Math.PI/4,vec3.fromValues(1,0,0));
+    //mat4.scale(m3,m3,vec3.fromValues(2,2,2));
+
 
 
 
